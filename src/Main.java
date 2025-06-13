@@ -26,7 +26,7 @@ public class Main {
             System.out.println("1. Add a Service");
             System.out.println("2. Book a Service");
             System.out.println("3. Exit");
-            System.out.print("Enter your choice: ");
+            System.out.print("Enter your choice (1, 2, 3): ");
             String choice = sc.nextLine();
 
             //add a service
@@ -39,8 +39,9 @@ public class Main {
                     System.out.print("Enter category: ");
                     serviceCategories[serviceCount] = sc.nextLine();
 
-                    System.out.print("Enter hourly rate: ");
-                    serviceRates[serviceCount] = Double.parseDouble(sc.nextLine());
+                    System.out.print("Enter hourly rate($): ");
+                    String rates = sc.nextLine();
+                    serviceRates[serviceCount] = Double.parseDouble(rates);
 
                     serviceBooked[serviceCount] = false;
                     serviceCount++;
@@ -48,7 +49,7 @@ public class Main {
                     System.out.println("Service added successfully!\n");
                     System.out.print("Do you want to add another service? (yes/no): ");
                     String addAnother = sc.nextLine();
-                    if (!addAnother.equalsIgnoreCase("yes")) {
+                    if (addAnother.equals("no")) {
                         adding = false;
                     }
                 }
@@ -83,7 +84,8 @@ public class Main {
                 }
 
                 System.out.print("Choose a category by number: ");
-                int selected = Integer.parseInt(sc.nextLine());
+                String selection = sc.nextLine();
+                int selected = Integer.parseInt(selection);
                 if (selected < 1 || selected > categoryCount) {
                     System.out.println("Invalid category choice.");
                 }
@@ -114,17 +116,19 @@ public class Main {
 
                 //find what service to add to cart
                 System.out.print("Select a service to add to cart: ");
-                int serviceChoice = Integer.parseInt(sc.nextLine());
+                String choose = sc.nextLine();
+                int serviceChoice = Integer.parseInt(choose);
                 if (serviceChoice < 1 || serviceChoice > matchCount) {
                     System.out.println("Invalid selection.");
                 }
 
-                //add that service to cart
+                //check if service is booked
                 int selectedService = matches[serviceChoice - 1];
                 if (serviceBooked[selectedService]) {
                     System.out.println("This service is fully booked.");
                 }
 
+                //add selected service to cart
                 serviceBooked[selectedService] = true;
                 cartIndexes[cartCount] = selectedService;
                 cartCount++;
@@ -142,7 +146,7 @@ public class Main {
 
                 // manage the cart
                 boolean managing = true;
-                while (managing) {
+                while (managing == true) {
                     System.out.println("\nCART MENU:");
                     System.out.println("1. Remove a Service");
                     System.out.println("2. Checkout");
@@ -160,7 +164,8 @@ public class Main {
                             total += serviceRates[index];
                         }
                         System.out.print("Enter the number of the service to remove: ");
-                        int removeIndex = Integer.parseInt(sc.nextLine());
+                        String remove = sc.nextLine();
+                        int removeIndex = Integer.parseInt(remove);
                         if (removeIndex < 1 || removeIndex > cartCount) {
                             System.out.println("Invalid index.");
                         }
@@ -185,9 +190,13 @@ public class Main {
                         }
                         System.out.println("Total: $" + total);
                         System.out.println("Thank you for your order!");
+
+                        //resets the cart after purchase
                         cartCount = 0;
                         managing = false;
                     }
+
+                    //back to main menu
                     else if (input.equals("3")) {
                         managing = false;
                     }
@@ -205,5 +214,7 @@ public class Main {
                 System.out.println("Invalid choice. Try again.");
             }
         }
+    
+        sc.close();
     }
 }
